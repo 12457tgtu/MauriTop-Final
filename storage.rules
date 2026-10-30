@@ -1,0 +1,17 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    match /{allPaths=**} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+    
+    // Explicitly secure paths if needed, but the above is a good start.
+    // For production, we'd check if the user is an admin for anime uploads.
+  }
+}
